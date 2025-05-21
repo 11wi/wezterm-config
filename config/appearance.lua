@@ -36,9 +36,11 @@ return {
    switch_to_last_active_tab_when_closing_tab = true,
 
    -- window
+   initial_rows = 40,
+   initial_cols = 150,
    window_padding = {
-      left = 0,
-      right = 0,
+      left = 10,
+      right = 10,
       top = 10,
       bottom = 7.5,
    },
@@ -54,8 +56,8 @@ return {
    --    brightness = 0.65,
    -- },
    inactive_pane_hsb = {
-      saturation = 1,
-      brightness = 1,
+      saturation = 0.5,
+      brightness = 0.5,
    },
 
    visual_bell = {
