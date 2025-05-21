@@ -11,7 +11,8 @@ if platform.is_mac then
    mod.SUPER_OPT = 'SUPER|OPT'
 elseif platform.is_win or platform.is_linux then
    mod.SUPER = 'ALT' -- to not conflict with Windows key shortcuts
-   mod.SUPER_SFT = 'ALT|CTRL'
+   mod.SUPER_SFT = 'ALT|SHIFT'
+   mod.SUPER_OPT = 'ALT|CTRL'
 end
 
 -- stylua: ignore
