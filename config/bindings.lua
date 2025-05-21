@@ -7,10 +7,11 @@ local mod = {}
 
 if platform.is_mac then
    mod.SUPER = 'SUPER'
-   mod.SUPER_REV = 'SUPER|CTRL'
+   mod.SUPER_SFT = 'SUPER|SHIFT'
+   mod.SUPER_OPT = 'SUPER|OPT'
 elseif platform.is_win or platform.is_linux then
    mod.SUPER = 'ALT' -- to not conflict with Windows key shortcuts
-   mod.SUPER_REV = 'ALT|CTRL'
+   mod.SUPER_SFT = 'ALT|CTRL'
 end
 
 -- stylua: ignore
@@ -25,12 +26,12 @@ local keys = {
       mods = 'NONE',
       action = act.ShowLauncherArgs({ flags = 'FUZZY|WORKSPACES' }),
    },
-   { key = 'F11', mods = 'NONE',    action = act.ToggleFullScreen },
+   { key = 'Enter', mods = mod.SUPER,    action = act.ToggleFullScreen },
    { key = 'F12', mods = 'NONE',    action = act.ShowDebugOverlay },
    { key = 'f',   mods = mod.SUPER, action = act.Search({ CaseInSensitiveString = '' }) },
    {
       key = 'u',
-      mods = mod.SUPER_REV,
+      mods = mod.SUPER_SFT,
       action = wezterm.action.QuickSelectArgs({
          label = 'open url',
          patterns = {
@@ -52,26 +53,28 @@ local keys = {
    { key = 'LeftArrow',  mods = mod.SUPER,     action = act.SendString '\u{1b}OH' },
    { key = 'RightArrow', mods = mod.SUPER,     action = act.SendString '\u{1b}OF' },
    { key = 'Backspace',  mods = mod.SUPER,     action = act.SendString '\u{15}' },
-
-   -- copy/paste --
-   { key = 'c',          mods = 'CTRL|SHIFT',  action = act.CopyTo('Clipboard') },
-   { key = 'v',          mods = 'CTRL|SHIFT',  action = act.PasteFrom('Clipboard') },
+      -- copy/paste --
+   { key = 'c',          mods = mod.SUPER,  action = act.CopyTo('Clipboard') },
+   { key = 'v',          mods = mod.SUPER,  action = act.PasteFrom('Clipboard') },
 
    -- tabs --
    -- tabs: spawn+close
    { key = 't',          mods = mod.SUPER,     action = act.SpawnTab('DefaultDomain') },
-   { key = 't',          mods = mod.SUPER_REV, action = act.SpawnTab({ DomainName = 'WSL:Ubuntu' }) },
-   { key = 'w',          mods = mod.SUPER_REV, action = act.CloseCurrentTab({ confirm = false }) },
+   { key = 'w',          mods = mod.SUPER_SFT, action = act.CloseCurrentTab({ confirm = false }) },
+   { key = 'k',          mods = mod.SUPER_OPT, action = act.SpawnTab({ DomainName = 'kko' }) },
+   { key = 'd',          mods = mod.SUPER_OPT, action = act.SpawnTab({ DomainName = 'dev' }) },
+   { key = 'p',          mods = mod.SUPER_OPT, action = act.SpawnTab({ DomainName = 'prod' }) },
+   
 
    -- tabs: navigation
-   { key = '[',          mods = mod.SUPER,     action = act.ActivateTabRelative(-1) },
-   { key = ']',          mods = mod.SUPER,     action = act.ActivateTabRelative(1) },
-   { key = '[',          mods = mod.SUPER_REV, action = act.MoveTabRelative(-1) },
-   { key = ']',          mods = mod.SUPER_REV, action = act.MoveTabRelative(1) },
+   { key = '[',          mods = mod.SUPER_SFT,     action = act.ActivateTabRelative(-1) },
+   { key = ']',          mods = mod.SUPER_SFT,     action = act.ActivateTabRelative(1) },
+   { key = '[',          mods = mod.SUPER_OPT, action = act.MoveTabRelative(-1) },
+   { key = ']',          mods = mod.SUPER_OPT, action = act.MoveTabRelative(1) },
 
    -- tab: title
    { key = '0',          mods = mod.SUPER,     action = act.EmitEvent('tabs.manual-update-tab-title') },
-   { key = '0',          mods = mod.SUPER_REV, action = act.EmitEvent('tabs.reset-tab-title') },
+   { key = '0',          mods = mod.SUPER_SFT, action = act.EmitEvent('tabs.reset-tab-title') },
 
    -- tab: hide tab-bar
    { key = '9',          mods = mod.SUPER,     action = act.EmitEvent('tabs.toggle-tab-bar'), },
@@ -107,7 +110,7 @@ local keys = {
          window:set_inner_size(new_width, new_height)
       end)
    },
-
+   
    -- background controls --
    {
       key = [[/]],
@@ -132,7 +135,7 @@ local keys = {
    },
    {
       key = [[/]],
-      mods = mod.SUPER_REV,
+      mods = mod.SUPER_SFT,
       action = act.InputSelector({
          title = 'InputSelector: Select Background',
          choices = backdrops:choices(),
@@ -158,34 +161,45 @@ local keys = {
    -- panes --
    -- panes: split panes
    {
-      key = [[\]],
+      key = 'd',
       mods = mod.SUPER,
       action = act.SplitVertical({ domain = 'CurrentPaneDomain' }),
-   },
+   }, 
    {
-      key = [[\]],
-      mods = mod.SUPER_REV,
+      key = 'd',
+      mods = mod.SUPER_SFT,
       action = act.SplitHorizontal({ domain = 'CurrentPaneDomain' }),
    },
-
+   
    -- panes: zoom+close pane
-   { key = 'Enter', mods = mod.SUPER,     action = act.TogglePaneZoomState },
+   { key = 'Enter', mods = mod.SUPER_SFT,     action = act.TogglePaneZoomState },
    { key = 'w',     mods = mod.SUPER,     action = act.CloseCurrentPane({ confirm = false }) },
 
    -- panes: navigation
-   { key = 'k',     mods = mod.SUPER_REV, action = act.ActivatePaneDirection('Up') },
-   { key = 'j',     mods = mod.SUPER_REV, action = act.ActivatePaneDirection('Down') },
-   { key = 'h',     mods = mod.SUPER_REV, action = act.ActivatePaneDirection('Left') },
-   { key = 'l',     mods = mod.SUPER_REV, action = act.ActivatePaneDirection('Right') },
+   {
+      key = 'LeftArrow',
+      mods = mod.SUPER_OPT,
+      action = wezterm.action.ActivatePaneDirection('Left')
+  }, {
+      key = 'RightArrow',
+      mods = mod.SUPER_OPT,
+      action = wezterm.action.ActivatePaneDirection('Right')
+  }, {
+      key = 'UpArrow',
+      mods = mod.SUPER_OPT,
+      action = wezterm.action.ActivatePaneDirection('Up')
+  }, {
+      key = 'DownArrow',
+      mods = mod.SUPER_OPT,
+      action = wezterm.action.ActivatePaneDirection('Down')
+  },
    {
       key = 'p',
-      mods = mod.SUPER_REV,
+      mods = mod.SUPER_SFT,
       action = act.PaneSelect({ alphabet = '1234567890', mode = 'SwapWithActiveKeepFocus' }),
    },
 
    -- panes: scroll pane
-   { key = 'u',        mods = mod.SUPER, action = act.ScrollByLine(-5) },
-   { key = 'd',        mods = mod.SUPER, action = act.ScrollByLine(5) },
    { key = 'PageUp',   mods = 'NONE',    action = act.ScrollByPage(-0.75) },
    { key = 'PageDown', mods = 'NONE',    action = act.ScrollByPage(0.75) },
 
@@ -243,7 +257,7 @@ local mouse_bindings = {
 return {
    disable_default_key_bindings = true,
    -- disable_default_mouse_bindings = true,
-   leader = { key = 'Space', mods = mod.SUPER_REV },
+   leader = { key = 'b', mods = 'CTRL' },
    keys = keys,
    key_tables = key_tables,
    mouse_bindings = mouse_bindings,
