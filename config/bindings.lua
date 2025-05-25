@@ -49,7 +49,15 @@ local keys = {
          end),
       }),
    },
-
+   {
+      key = 'k',
+      mods = mod.SUPER,
+      action = act.Multiple {
+        act.ClearScrollback 'ScrollbackAndViewport',
+        act.SendKey { key = 'L', mods = 'CTRL' },
+      },
+   },
+   
    -- cursor movement --
    { key = 'LeftArrow',  mods = mod.SUPER,     action = act.SendString '\u{1b}OH' },
    { key = 'RightArrow', mods = mod.SUPER,     action = act.SendString '\u{1b}OF' },
