@@ -209,8 +209,8 @@ local keys = {
    },
 
    -- panes: scroll pane
-   { key = 'PageUp',   mods = 'NONE',    action = act.ScrollByPage(-0.75) },
-   { key = 'PageDown', mods = 'NONE',    action = act.ScrollByPage(0.75) },
+   -- { key = 'PageUp',   mods = 'NONE',    action = act.ScrollByPage(-0.75) },
+   -- { key = 'PageDown', mods = 'NONE',    action = act.ScrollByPage(0.75) },
 
    -- key-tables --
    -- resizes fonts
