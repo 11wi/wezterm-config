@@ -18,6 +18,7 @@ end
 -- stylua: ignore
 local keys = {
    -- misc/useful --
+   { key = 'q', mods = mod.SUPER, action = wezterm.action.QuitApplication },
    { key = 'F1', mods = 'NONE', action = 'ActivateCopyMode' },
    { key = 'F2', mods = 'NONE', action = act.ActivateCommandPalette },
    { key = 'F3', mods = 'NONE', action = act.ShowLauncher },
